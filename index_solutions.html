@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>L'Apéro – Solutions [build-30]</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --arc:linear-gradient(90deg,#FF0000,#FF9900,#FFEE00,#33CC33,#0099FF,#6633CC,#FF0099);
+  --or:#D4AC0D;--vert:#1E8449;--vert-p:#EAFAF1;
+  --gris-f:#2C3E50;--gris-m:#566573;--gris-cl:#F2F3F4;
+  --blanc:#FFF;--texte:#1A1A2E;--ombre:rgba(0,0,0,0.15);
+  --r:16px;--rs:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Lato',sans-serif;background:linear-gradient(160deg,#1A1A2E 0%,#2C1A4E 40%,#1A1A2E 100%);min-height:100vh;color:var(--texte);}
+
+header{background:rgba(0,0,0,0.45);padding:16px 20px 12px;text-align:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);border-bottom:2px solid rgba(212,172,13,0.5);}
+header h1{font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:900;color:var(--or);letter-spacing:3px;text-shadow:2px 2px 8px rgba(0,0,0,0.5);line-height:1;}
+.badge-equipe{display:inline-block;margin-top:6px;background:var(--arc);background-size:200% 100%;animation:arcanim 4s linear infinite;color:#fff;font-weight:700;font-size:0.85rem;letter-spacing:4px;padding:5px 20px;border-radius:30px;border:2px solid #fff;text-shadow:0 1px 3px rgba(0,0,0,0.5);}
+@keyframes arcanim{0%{background-position:0% 50%;}100%{background-position:200% 50%;}}
+
+.container{max-width:480px;margin:0 auto;padding:16px 14px 50px;}
+
+/* ── PROGRESSION ── */
+.card-prog{background:var(--blanc);border-radius:var(--r);padding:16px 18px 14px;margin-bottom:16px;box-shadow:0 4px 20px var(--ombre);}
+.prog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.prog-titre{font-weight:700;font-size:0.9rem;color:var(--gris-m);text-transform:uppercase;letter-spacing:1px;}
+
+/* ── PASTILLES : grille fixe 1 rangée, taille auto ── */
+.pastilles{
+  display:grid;
+  grid-template-columns: repeat(6,1fr) 4px 1fr;
+  gap:5px;
+  align-items:center;
+}
+.past{
+  width:100%;aspect-ratio:1;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;
+  border:2px solid #ddd;background:var(--gris-cl);color:#bbb;
+  transition:box-shadow 0.2s;cursor:pointer;user-select:none;
+}
+.past.fait {background:var(--vert); border-color:var(--vert); color:#fff;}
+.past.libre-fait{background:var(--vert);border-color:var(--vert);color:#fff;}
+
+/* HALO uniquement sur la pastille dont la carte est affichée */
+.past.halo{box-shadow:0 0 0 3px #fff,0 0 0 6px rgba(255,255,255,0.6)!important;}
+.past:not(.halo){box-shadow:none!important;}
+
+.sep{background:rgba(0,0,0,0.12);height:100%;width:100%;border-radius:2px;}
+
+/* ── CARTE ── */
+.carte{background:var(--blanc);border-radius:var(--r);overflow:hidden;box-shadow:0 6px 28px var(--ombre);margin-bottom:14px;}
+.hd-v{background:linear-gradient(135deg,#155724,var(--vert));padding:16px 20px;color:#fff;position:relative;}
+.hd-badge{display:inline-block;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);border-radius:20px;font-size:0.72rem;font-weight:700;letter-spacing:2px;padding:3px 11px;margin-bottom:7px;text-transform:uppercase;}
+.hd-nom{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;line-height:1.2;}
+.hd-sub{font-size:0.88rem;opacity:0.88;margin-top:3px;font-style:italic;}
+.badge-libre{display:inline-block;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.5);border-radius:20px;color:#fff;font-size:0.72rem;font-weight:700;padding:2px 10px;margin-left:6px;letter-spacing:1px;vertical-align:middle;}
+
+.valide-corps{padding:16px 20px;}
+.succes{background:var(--vert-p);border:2px solid var(--vert);border-radius:var(--rs);padding:16px;margin-top:0;}
+.succes-t{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--vert);margin-bottom:10px;}
+.indice{background:#fff;border-radius:var(--rs);padding:14px;margin-top:8px;font-size:1rem;line-height:1.6;color:var(--texte);border:1px solid #C8E6C9;}
+.indice-l{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--vert);margin-bottom:7px;}
+.coords{background:var(--gris-cl);border-radius:var(--rs);padding:11px 15px;margin-top:9px;font-family:monospace;font-size:1rem;color:var(--gris-f);text-align:center;letter-spacing:1px;}
+.coords-note{text-align:center;font-size:0.75rem;color:var(--gris-m);margin-top:5px;}.coords-note em{font-style:italic;}
+.btn-nav{width:100%;background:linear-gradient(135deg,#155724,var(--vert));color:#fff;border:none;border-radius:var(--rs);padding:15px;font-family:'Lato',sans-serif;font-size:1.08rem;font-weight:700;cursor:pointer;margin-top:12px;letter-spacing:1px;box-shadow:0 4px 12px rgba(30,132,73,0.4);display:flex;align-items:center;justify-content:center;gap:10px;}
+.btn-nav:active{transform:scale(0.98);}
+.btn-nav svg{width:22px;height:22px;fill:currentColor;flex-shrink:0;}
+</style>
+</head>
+<body>
+<header>
+  <div style="position:relative;">
+    <h1>🥂 L'Apéro</h1>
+    <div class="badge-equipe">⬤ SOLUTIONS</div>
+  </div>
+</header>
+<div class="container" id="app"></div>
+<script>
+// ================================================================
+// CONFIG
+// ================================================================
+const ORDRE  = ["A","B","C","D","E","F"];
+const LIBRES = ["G"];
+const AFF    = {A:"P", B:"N", C:"E", D:"F", E:"A", F:"G", G:"R"};
+
+// ================================================================
+// DONNÉES
+// ================================================================
+const PTS = {
+  A:{sport:"La Pétanque",emoji:"🎯",lat:44.70911550894786,lng:2.6406847508930964,
+    indice:"Dans la niche, récupérer UNIQUEMENT la fiche de votre couleur."},
+  B:{sport:"La Natation",emoji:"🏊",lat:44.708527,lng:2.636088,
+    indice:"La fontaine de Saurel est en fait un lavoir. Sous le rebord horizontal du lavoir, récupérer UNIQUEMENT la fiche de votre couleur."},
+  C:{sport:"L'Escalade",emoji:"🧗",lat:44.711407,lng:2.638481,
+    indice:"\"Fromentie\" fait référence à l'artisan qui travaillait le froment et réalisait la farine de blé. Dans une anfractuosité du mur, récupérer UNIQUEMENT la fiche de votre couleur."},
+  D:{sport:"Le Football",emoji:"⚽",lat:44.712102,lng:2.642513,
+    indice:"Bernard Milhau a légué 14 millions d'euros à la commune lors de son décès, contre le fleurissement de cette sépulture. Ressortir du cimetière, et, derrière le bac à fleur au pied du panneau de limitation de vitesse, récupérer UNIQUEMENT la fiche de votre couleur."},
+  E:{sport:"Tir à l'Arc",emoji:"🏹",lat:44.710016,lng:2.639194,
+    indice:"La tour du château date de 1828. À son pied, derrière la plaque, récupérer UNIQUEMENT la fiche de votre couleur."},
+  F:{sport:"Le Golf",emoji:"⛳",lat:44.708456,lng:2.637502,
+    indice:"De nombreuses petites ruelles parcourent Montézic. Sous le petit regard pluvial, récupérer UNIQUEMENT la fiche de votre couleur."},
+  G:{sport:"La Randonnée",emoji:"🥾",lat:44.711654,lng:2.634968,
+    indice:"De ce superbe point de vue (prenez le temps !), redescendre et emprunter le petit sentier s'enfonçant dans la forêt, plein sud par rapport à la table d'orientation. Sur le chemin vous menant à Montézic, vous croiserez plusieurs sculptures en bois. Derrière le trône, que vous avez peut-être déjà vu en montant, récupérer UNIQUEMENT la fiche de votre couleur."}
+};
+
+// pointAffiche : lettre interne, point actuellement affiché.
+let pointAffiche = ORDRE[0];
+
+// ================================================================
+// NAVIGATION — directe, sans modal
+// ================================================================
+function allerA(lat, lng){
+  const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const url = ios
+    ? "maps://maps.apple.com/?daddr="+lat+","+lng+"&dirflg=w"
+    : "https://www.google.com/maps/dir/?api=1&destination="+lat+","+lng+"&travelmode=walking";
+  window.open(url, "_blank");
+}
+
+// ================================================================
+// RENDU
+// ================================================================
+function render(){
+  const app = document.getElementById("app");
+
+  // ── Pastilles : toutes auto-validées, toutes cliquables ──────
+  let ph = "";
+  ORDRE.forEach(p=>{
+    let cls = "past fait";
+    if(p === pointAffiche) cls += " halo";
+    ph += '<div class="'+cls+'" onclick="afficherPoint(\''+p+'\')">'+AFF[p]+'</div>';
+  });
+  ph += '<div class="sep"></div>';
+  LIBRES.forEach(p=>{
+    let cls = "past libre-fait";
+    if(p === pointAffiche) cls += " halo";
+    ph += '<div class="'+cls+'" onclick="afficherPoint(\''+p+'\')">'+AFF[p]+'</div>';
+  });
+
+  let html = '<div class="card-prog">'
+    +'<div class="prog-head">'
+    +'<span class="prog-titre">Points</span>'
+    +'</div>'
+    +'<div class="pastilles">'+ph+'</div>'
+    +'</div>';
+
+  // ── Carte unique : pointAffiche, toujours affichée en "validé" ──
+  const pt  = PTS[pointAffiche];
+  const aff = AFF[pointAffiche];
+  const lib = LIBRES.includes(pointAffiche);
+  const badge = (lib ? 'Point libre<span class="badge-libre">LIBRE</span>' : 'Point '+aff);
+
+  html += '<div class="carte" id="card-'+pointAffiche+'">'
+    +'<div class="hd-v">'
+    +'<span class="hd-badge">'+badge+'</span>'
+    +'<div class="hd-nom">'+pt.emoji+' '+pt.sport+'</div>'
+    +'<div class="hd-sub">📍 Accès direct à la position</div>'
+    +'</div>'
+    +'<div class="valide-corps">'
+    +'<div class="succes">'
+    +'<div class="succes-t">📍 Indice pour trouver votre fiche</div>'
+    +'<div class="indice">'+pt.indice+'</div>'
+    +'<div class="coords">📌 '+pt.lat.toFixed(6)+', '+pt.lng.toFixed(6)+'</div>'
+    +'<div class="coords-note"><em>Coordonnées fiables à quelques mètres près</em> 😉</div>'
+    +'<button class="btn-nav" onclick="allerA('+pt.lat+','+pt.lng+')">'
+    +'<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>'
+    +'Y aller !</button>'
+    +'</div></div></div>';
+
+  app.innerHTML = html;
+}
+
+// ================================================================
+// INTERACTIONS
+// ================================================================
+function afficherPoint(lettre){
+  pointAffiche = lettre;
+  render();
+}
+
+// ================================================================
+// DÉMARRAGE
+// ================================================================
+render();
+</script>
+</body>
+</html>
